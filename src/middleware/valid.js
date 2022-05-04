@@ -84,7 +84,7 @@ const validateInternship = async function (req, res, next) {
             return res.status(400).send({ status: false, msg: "Mobile number should have digits only" });
         }
 
-         if (Object.values(mobile).length < 9) {
+        if (Object.values(mobile).length < 10 || Object.values(mobile).length > 10) {
             return res.status(400).send({status:false,msg:"Enter the vailid mobile number"});
         }
         
