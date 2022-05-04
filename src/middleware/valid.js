@@ -80,7 +80,7 @@ const validateInternship = async function (req, res, next) {
         if(internship){
             return res.status(400).send("This email is already exists");
         }
-        if (Object.values(mobile).length <= 0) {
+        if (Object.values(mobile).length = 10) {
             return res.status(400).send({status:false, msg:"Mobile Number is Required!!"});
         }
         
