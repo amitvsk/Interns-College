@@ -81,7 +81,7 @@ const validateInternship = async function (req, res, next) {
             return res.status(400).send("This email is already exists");
         }
         if (Object.values(mobile).length = 10) {
-            return res.status(400).send({status:false, msg:"Mobile Number is Required!!"});
+            return res.status(400).send({status:false, msg:"Please enter a vailid mobile number!!"});
         }
         
         let mobileU = await InternshipModel.findOne(mobile);
