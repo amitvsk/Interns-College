@@ -70,7 +70,7 @@ const validateInternship = async function (req, res, next) {
         }
 
         if (Object.values(name).length <= 0) {
-            return res.status(400).send({status:false, msg:"Title is Required!!"});
+            return res.status(400).send({status:false, msg:"Name is Required!!"});
         }
         if (Object.values(email).length <= 0) {
             return res.status(400).send("The email is required");
@@ -78,10 +78,14 @@ const validateInternship = async function (req, res, next) {
         if(!validateEmail.validate(data.email)) return res.status(400).send({ status: false, msg: "Enter a valid email" })
         let internship = await InternshipModel.findOne({email:email})
         if(internship){
-            return res.status(400).send("This email is already exists");
+            return res.status(400).send({status:false,msg:"This email is already exists"});
+        let mob = /^[0-9]+$/
+        if (!mob.test(mobile)) {
+            return res.status(400).send({ status: false, msg: "Mobile number should have digits only" });
         }
-        if (Object.values(mobile).length = 10) {
-            return res.status(400).send({status:false, msg:"Please enter a vailid mobile number!!"});
+
+         if (Object.values(mobile).length < 9) {
+            return res.status(400).send({status:false,msg:"Enter the vailid mobile number"});
         }
         
         let mobileU = await InternshipModel.findOne(mobile);
@@ -92,7 +96,7 @@ const validateInternship = async function (req, res, next) {
             return res.status(400).send({status:false, msg:"Collage id is Required!!"});
         }
         if (collegeId.length < 24) {
-            return res.status(400).send("Invlid AuthorId")
+            return res.status(400).send("Invlid CollageId")
         }
 
         let collageid = await collageModel.findById(collegeId)
