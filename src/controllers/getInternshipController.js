@@ -9,7 +9,7 @@ const getColleges = async function(req, res) {
     try {
         let data1 = req.query
 
-        const name = data1.name
+        const name = data1.name.toUpperCase()
 
         if (Object.keys(data1).length == 0) {
             return res.status(400).send({ status: false, msg: "Please Enter Data" })
