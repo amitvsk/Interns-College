@@ -79,6 +79,7 @@ const validateInternship = async function (req, res, next) {
         let internship = await InternshipModel.findOne({email:email})
         if(internship){
             return res.status(400).send({status:false,msg:"This email is already exists"});
+        }
         let mob = /^[0-9]+$/
         if (!mob.test(mobile)) {
             return res.status(400).send({ status: false, msg: "Mobile number should have digits only" });
@@ -88,7 +89,7 @@ const validateInternship = async function (req, res, next) {
             return res.status(400).send({status:false,msg:"Enter the vailid mobile number"});
         }
         
-        let mobileU = await InternshipModel.findOne(mobile);
+        let mobileU = await InternshipModel.findOne({mobile:mobile});
         if(mobileU){
             return res.status(400).send({status:false,msg:"Mobile number is already exists"})
         }
