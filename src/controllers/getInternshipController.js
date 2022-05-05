@@ -9,7 +9,7 @@ const getColleges = async function(req, res) {
     try {
         let data1 = req.query
 
-        const name = data1.name.toUpperCase()
+        const name = data1.name
 
         if (Object.keys(data1).length == 0) {
             return res.status(400).send({ status: false, msg: "Please Enter Data" })
@@ -25,7 +25,7 @@ const getColleges = async function(req, res) {
         if (!/^[a-zA-z , ;]{2,30}$/.test(name)) {
             return res.status(400).send({ status: false, msg: "Please Enter Valied Format CollegeName" })
         }
-        let check = await collegeModel.findOne({ name: name })
+        let check = await collegeModel.findOne({ name: name.toUpperCase()})
         if (!check) {
             return res.status(400).send({ status: false, msg: "Thise College Doesn't Exist" })
         }
@@ -38,12 +38,12 @@ const getColleges = async function(req, res) {
         }
 
         let Doc = {
-            name: name,
+            name: name.toUpperCase(),
             fullName: check.fullName,
             logoLink: check.logoLink,
             interests: findintern
         }
-        return res.status(400).send({ status: true, data: Doc })
+        return res.status(200).send({ status: true, data: Doc })
 
     } catch (err) {
         console.log(err.message)

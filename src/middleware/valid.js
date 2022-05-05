@@ -3,14 +3,14 @@ const validateEmail = require('email-validator');
 const collageModel = require('../models/collageModel');
 const InternshipModel = require('../models/InternshipModel');
 
-//************************check validation of college model************************************//
+//********************************check validation of college model************************************//
 
 const validatecollage = async function (req, res, next) {
     try {
         let data = req.body
         const { name, fullName, logoLink} = data
 
-        if (Object.keys(data).length != 0) {
+        if (Object.keys(data).length != 0) { // check the key are present or not
             if (data.name === undefined) {
                 return res.status(400).send({ status: false, msg: "Name is Missing !!" });
             }
@@ -25,7 +25,7 @@ const validatecollage = async function (req, res, next) {
             return res.status(400).send({ msg: "Mandatory field Missing!!" })
         }
 
-        if (Object.values(name.trim()).length <= 0) {
+        if (Object.values(name.trim()).length <= 0) { //check the values of name
             return res.status(400).send("The name is required");
         }
         if(!(/^[A-Za-z ]+$/.test(name) )){ return res.status(400).send({ msg: "name is not valid!!" })}
@@ -57,7 +57,7 @@ const validatecollage = async function (req, res, next) {
 module.exports.validatecollage = validatecollage;
 
 
-//************************check validation of internship model************************************//
+//****************************check validation of internship model************************************//
 
 const validateInternship = async function (req, res, next) {
     try {
