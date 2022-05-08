@@ -10,16 +10,14 @@ const internshipSchema = new mongoose.Schema(
         },
         email: {
             type:String,
-            unique:true,
             required:true,
             lowercase:true
         },
         mobile:{
             type:Number,
             required:true,
-            unique:true
         },
-        collegeId:{
+        collegeName:{
             type:ObjectId,
             ref:"Collage",
             required:true

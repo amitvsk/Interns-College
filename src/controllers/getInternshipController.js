@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+
 
 const collegeModel = require("../models/collageModel")
 const internModel = require("../models/InternshipModel")
@@ -7,9 +7,9 @@ const internModel = require("../models/InternshipModel")
 
 const getColleges = async function(req, res) {
     try {
+        res.setHeader("Access-Control-Allow-Origin","*")
         let data1 = req.query
-
-        const name = data1.name
+        const name = data1.collegeName
 
         if (Object.keys(data1).length == 0) {
             return res.status(400).send({ status: false, msg: "Please Enter Data" })
@@ -25,20 +25,20 @@ const getColleges = async function(req, res) {
         if (!/^[a-zA-z , ;]{2,30}$/.test(name)) {
             return res.status(400).send({ status: false, msg: "Please Enter Valied Format CollegeName" })
         }
-        let check = await collegeModel.findOne({ name: name.toUpperCase()})
+        let check = await collegeModel.findOne({ name: name.toLowerCase()})
         if (!check) {
-            return res.status(400).send({ status: false, msg: "Thise College Doesn't Exist" })
+            return res.status(400).send({ status: false, msg: "This College Doesn't Exist" })
         }
         let id = check._id
 
-        let findintern = await internModel.find({ collegeId: id }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
+        let findintern = await internModel.find({ collegeName: id ,isDeleted:false}).select({ _id: 1, name: 1, email: 1, mobile: 1 })
 
         if (!findintern.length) {
             return res.status(400).send({ status: false, msg: "there is No intern In the College" })
         }
 
         let Doc = {
-            name: name.toUpperCase(),
+            name: name.toLowerCase(),
             fullName: check.fullName,
             logoLink: check.logoLink,
             interests: findintern

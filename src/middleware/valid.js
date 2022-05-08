@@ -27,23 +27,24 @@ const validatecollage = async function (req, res, next) {
 
         if (Object.values(name.trim()).length <= 0) { //check the values of name
             return res.status(400).send("The name is required");
-        }
+        }// validation of name
         if(!(/^[A-Za-z ]+$/.test(name) )){ return res.status(400).send({ msg: "name is not valid!!" })}
 
-        let collageName = await collageModel.findOne({name:name})
-        if(collageName){
+        let collageName = await collageModel.findOne({name:name,isDeleted:false})
+        if(collageName){ // check the name are unique 
             return res.status(400).send("This Name is already exists");
         }
 
-        if (Object.values(fullName.trim()).length <= 0) {
+        if (Object.values(fullName.trim()).length <= 0) {  //check the values of Fullname
             return res.status(400).send("The fullName is required");
         }
-
+            // validation of full name 
         if(!(/^[A-Za-z , ; .]+$/.test(fullName) )){ return res.status(400).send({ msg: "Fullname is not valid!!" })}
 
-        if (Object.values(logoLink.trim()).length <= 0) {
+        if (Object.values(logoLink.trim()).length <= 0) {  //check the values of Logo link
             return res.status(400).send("The logoLink is required");
         }
+        // validation of logo link
         if(!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:\+.~#?&//=]*)/.test(logoLink))){
             return res.status(400).send({ status: false, msg: "logoLink is a not valid" });
         } else {
@@ -62,9 +63,9 @@ module.exports.validatecollage = validatecollage;
 const validateInternship = async function (req, res, next) {
     try {
         let data = req.body
-        const { name, email, mobile, collegeId } = data
+        const { name, email, mobile, collegeName } = data
 
-        if (Object.keys(data).length != 0) {
+        if (Object.keys(data).length != 0) { //check the key are enter our not
             if (data.name === undefined) {
                 return res.status(400).send({ status: false, msg: "Name MISSING!!" });
             }
@@ -74,27 +75,32 @@ const validateInternship = async function (req, res, next) {
             if (data.mobile === undefined) {
                 return res.status(400).send({ status: false, msg: "Moblie MISSSING!!" });
             }
-            if (data.collegeId === undefined) {
+            if (data.collegeName === undefined) {
                 return res.status(400).send({ status: false, msg: "CollageId MISSING!!!" });
             }
         }
         else {
             return res.status(400).send({ msg: "Mandatory field Missing!!" });
         }
-
+        // check the values of name
         if (Object.values(name.trim()).length <= 0) {
             return res.status(400).send({status:false, msg:"Name is Required!!"});
         }
+        // check the validation of name
         if(!(/^[A-Za-z . ]+$/.test(name) )){ return res.status(400).send({ msg: "name is not valid!!" })}
 
+            //check the email value
         if (Object.values(email.trim()).length <= 0) {
             return res.status(400).send("The email is required");
         }
+        //check the validation of email
         if(!validateEmail.validate(data.email)) return res.status(400).send({ status: false, msg: "Enter a valid email" })
-        let internship = await InternshipModel.findOne({email:email})
+        //check the email are unique
+        let internship = await InternshipModel.findOne({email:email,isDeleted:false})
         if(internship){
             return res.status(400).send({status:false,msg:"This email is already exists"});
         }
+        //check the validation of mobile
         let mob = /^[0-9]+$/
         if (!mob.test(mobile.trim())) {
             return res.status(400).send({ status: false, msg: "Mobile number should have digits only" });
@@ -103,23 +109,23 @@ const validateInternship = async function (req, res, next) {
         if (Object.values(mobile).length < 10 || Object.values(mobile).length > 10) {
             return res.status(400).send({status:false,msg:"Enter the vailid mobile number"});
         }
-        
-        let mobileU = await InternshipModel.findOne({mobile:mobile});
+        // check the mobile are unique
+        let mobileU = await InternshipModel.findOne({mobile:mobile,isDeleted:false});
         if(mobileU){
             return res.status(400).send({status:false,msg:"Mobile number is already exists"})
         }
-        if (Object.values(collegeId.trim()).length <= 0) {
-            return res.status(400).send({status:false, msg:"College id is Required!!"});
+        if (Object.values(collegeName.trim()).length <= 0) {
+            return res.status(400).send({status:false, msg:"CollegeName id is Required!!"});
         }
-        if (collegeId.length < 24) {
-            return res.status(400).send("Invlid CollageId")
+        if (collegeName.length < 24) {
+            return res.status(400).send({status:false,msg:"Invlid CollageName Id"})
         }
-
-        let collageid = await collageModel.findById(collegeId)
+        //check the valid the coolege id
+        let collageid = await collageModel.findOne({_id:collegeName,isDeleted:false})
         if (!collageid) {
-            return res.status(400).send('Enter a valid Collage id!!');
+            return res.status(400).send({status:false,msg:'Enter a valid CollageName id!!'});
         } else {
-            next()
+            next()  //all procces done go on next function
         }
     }
     catch (err) {

@@ -6,9 +6,8 @@ const collageSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique:true,
-            uppercase:true,
-            trim:true
+            trim:true,
+            lowercase:true
         },
         fullName: {
             type: String,
